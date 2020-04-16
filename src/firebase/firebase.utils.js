@@ -1,5 +1,4 @@
 import firebase from 'firebase/app';
-
 import 'firebase/firestore';
 import 'firebase/auth';
 
@@ -15,44 +14,43 @@ const config =
     measurementId: "G-852RX3R3BC"
   };
 
+  firebase.initializeApp(config);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
 
-   if(!userAuth) return;
+  if(!userAuth) return;
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
+
   const snapShot = await userRef.get();
-  console.log(snapShot)
- 
- 
-if(!snapShot.exists) {
 
-const { displayName, email} = userAuth;
-const createdAt = new Date();
+  if(!snapShot.exists) {
 
-try {
-await userRef.set( {
-displayName,
-email,
-createdAt,
-...additionalData
+  const { displayName, email} = userAuth;
+  const createdAt = new Date();
 
-});
+  try {
+    
+    await userRef.set({
+    displayName,
+    email,
+    createdAt,
+    ...additionalData
+    });
 
-} catch (error){  console.log('error creating user', error.message);}
+  } catch (error){
+      console.log('error creating user', error.message);
+    } 
+  }
+  return userRef;
+};
+
+    
+
   
-}
-  };
-
-  
-
-  firebase.initializeApp(config);
-
-
-  export const auth = firebase.auth();
-  export const firestore = firebase.firestore();
-
-  const provider = new firebase.auth.GoogleAuthProvider();
+    export const auth = firebase.auth();
+    export const firestore = firebase.firestore();
+    const provider = new firebase.auth.GoogleAuthProvider();
     
 provider.setCustomParameters({  prompt: 'select_account' });
 
