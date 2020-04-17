@@ -37,7 +37,6 @@ this.setState({currentUser:
   }
   }); 
 
- console.log(this.state);
 });
 }
 this.setState({ currentUser: userAuth});
